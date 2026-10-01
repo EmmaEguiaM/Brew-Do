@@ -508,7 +508,7 @@ CAFES.forEach((c,i)=>{c.pal=i%4;c.reviews=[0,1].map(k=>{const p=POOL[(i*3+k*5)%P
 CAFES.find(c=>c.id==='taza-quieta').reviews.unshift({user:'Ana Torres',email:'demo@brewdo.mx',rating:5,text:'The quietest place I’ve found to write my thesis. The armchairs are super comfortable.',date:'2026-09-15',added:true,verified:false});
 
 const USERS={'demo@brewdo.mx':{name:'Ana Torres',email:'demo@brewdo.mx',pass:'brew123',since:'2026-08-12',role:'Remote worker',member:null,favs:['cafe-biblioteca','grano-codigo']}};
-const PLANS=[{id:'monthly',name:'Monthly',price:89,per:'month',note:'Cancel anytime'},{id:'annual',name:'Annual',price:790,per:'year',note:'Works out to $66 MXN per month',tag:'Save 26%'}];
+const PLANS=[{id:'monthly',name:'Monthly',price:5,per:'month',note:'Cancel anytime'},{id:'annual',name:'Annual',price:50,per:'year',note:'Works out to $4.17 USD per month',tag:'Save 17%'}];
 const HOODS=[['POLANCO',190,100],['BOSQUE DE CHAPULTEPEC',170,300],['JUÁREZ',440,236],['CENTRO',740,140],['ROMA NORTE',565,262],['CONDESA',330,296],['ROMA SUR',590,410],['ESCANDÓN',272,410],['NARVARTE',680,488],['DEL VALLE',505,530],['NÁPOLES',320,560],['COYOACÁN',690,580]];
 
 /* ================= STATE ================= */
@@ -819,8 +819,8 @@ function viewAccount(){const u=S.user;
  if(S.tab==='favs')pane=`${u.member?'':`<div class="limit"><span>${I('lock',16)} Free plan: <b>${favs.length}/3</b> favorites. With a membership you can save unlimited cafés.</span><button class="btn btn-brown btn-sm" data-action="tab" data-v="member">View membership</button></div>`}
   ${favs.length?`<div class="cgrid">${favs.map(card).join('')}</div><br><button class="btn btn-ghost btn-sm" data-action="go" data-v="explore">${I('plus',16)} Add more favorites</button>`:`<div class="empty"><h3>No favorites yet</h3><p class="muted">Tap the heart on any café to save it here.</p><br><button class="btn btn-green" data-action="go" data-v="explore">Explore cafés</button></div>`}`;
  else if(S.tab==='reviews')pane=mine.length?`<div class="rlist">${mine.map(r=>`<div class="myrev"><div class="th">${cafeArt(r.c,0)}</div><div style="flex:1;min-width:0"><b>${esc(r.c.name)}</b> <span class="muted" style="font-size:13px">· ${fmtD(r.date)}</span><div>${stars(r.rating,14)}</div><p style="font-size:14px">${esc(r.text)}</p></div><button class="btn btn-ghost btn-sm" data-action="open" data-id="${r.c.id}">View café</button></div>`).join('')}</div>`:`<div class="empty"><h3>You haven’t posted any reviews yet</h3><p class="muted">Rate the cafés you visit to help the community.</p></div>`;
- else pane=u.member?`<div class="tab"><div class="tcard"><span class="pill g">${I('shield',15)} Active membership</span><h3 class="h3" style="margin:14px 0 6px">${u.member.plan==='annual'?'Annual':'Monthly'} plan</h3><p>Valid until <b>${fmtD(u.member.until)}</b> · Paid: <b>$${u.member.price} MXN</b> with card ending in ${u.member.last4}.</p><ul class="perks" style="margin-top:20px">${perks()}</ul></div></div>`
-  :`<p class="eyebrow">Full access to the platform</p><h3 class="h3">Choose your membership</h3><div class="plans">${PLANS.map(p=>`<button class="plan ${S.plan===p.id?'on':''}" data-action="plan" data-v="${p.id}">${p.tag?`<span class="ptag">${p.tag}</span>`:''}<span class="pname">${p.name}</span><span class="pprice">$${p.price}<small> MXN/${p.per}</small></span><span class="pnote">${p.note}</span></button>`).join('')}</div><ul class="perks">${perks()}</ul><button class="btn btn-green" data-action="pay">${I('card',18)} Pay for membership</button>`;
+ else pane=u.member?`<div class="tab"><div class="tcard"><span class="pill g">${I('shield',15)} Active membership</span><h3 class="h3" style="margin:14px 0 6px">${u.member.plan==='annual'?'Annual':'Monthly'} plan</h3><p>Valid until <b>${fmtD(u.member.until)}</b> · Paid: <b>$${u.member.price} USD</b> with card ending in ${u.member.last4}.</p><ul class="perks" style="margin-top:20px">${perks()}</ul></div></div>`
+  :`<p class="eyebrow">Full access to the platform</p><h3 class="h3">Choose your membership</h3><div class="plans">${PLANS.map(p=>`<button class="plan ${S.plan===p.id?'on':''}" data-action="plan" data-v="${p.id}">${p.tag?`<span class="ptag">${p.tag}</span>`:''}<span class="pname">${p.name}</span><span class="pprice">$${p.price}<small> USD/${p.per}</small></span><span class="pnote">${p.note}</span></button>`).join('')}</div><ul class="perks">${perks()}</ul><button class="btn btn-green" data-action="pay">${I('card',18)} Pay for membership</button>`;
  return `<section class="wrap page-head"><p class="eyebrow">My account</p><h1 class="h2">Hi, ${esc(first())}</h1></section>
  <section class="wrap acc-grid"><aside class="tab"><div class="tcard profile"><span class="av">${esc(u.name[0])}</span><h3>${esc(u.name)}</h3>${u.member?`<span class="pill g">${I('shield',14)} Verified member</span>`:`<span class="pill o">Free plan</span>`}
   <div class="pinfo"><div><span>Email</span><b>${esc(u.email)}</b></div><div><span>Profile</span><b>${esc(u.role||'User')}</b></div><div><span>Member since</span><b>${fmtD(u.since)}</b></div><div><span>Favorites</span><b>${favs.length}</b></div><div><span>Reviews</span><b>${mine.length}</b></div></div>
@@ -892,11 +892,11 @@ function toggleFav(id){const u=S.user;
  rerender()}
 function openPay(){const p=PLANS.find(x=>x.id===S.plan);
  openModal(`<p class="eyebrow">Brew & Do Membership</p><h3 class="h3">Pay for membership</h3>
- <div class="paysum"><div><span style="opacity:.8;font-size:13px">${p.name} plan</span><br><b>$${p.price} MXN</b></div>${I('shield',30)}</div>
+ <div class="paysum"><div><span style="opacity:.8;font-size:13px">${p.name} plan</span><br><b>$${p.price} USD</b></div>${I('shield',30)}</div>
  <form data-form="pay"><div class="field"><label>Name on card</label><input required value="${esc(S.user.name)}"></div>
  <div class="field"><label>Card number</label><input id="ccn" required inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="off"></div>
  <div class="row2"><div class="field"><label>Expiry date</label><input id="ccx" required inputmode="numeric" placeholder="MM/YY"></div><div class="field"><label>CVC</label><input id="ccc" required inputmode="numeric" placeholder="123"></div></div>
- <button class="btn btn-green full" type="submit">${I('lock',17)} Pay $${p.price} MXN</button>
+ <button class="btn btn-green full" type="submit">${I('lock',17)} Pay $${p.price} USD</button>
  <p class="fine">${I('info',14)} Simulated payment for demo purposes — no charge will be made.</p></form>`)}
 
 /* ================= EVENTS ================= */
