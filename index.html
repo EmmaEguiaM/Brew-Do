@@ -784,7 +784,7 @@ function viewCafe(){const c=byId(S.id);if(!c)return `<section class="wrap sec"><
    <div class="rate-row"><span class="big">${a.toFixed(1)}</span>${stars(a,20)}<span class="muted">(${total(c)} reviews)</span><span class="ws">WorkScore ${ws(c)}/100</span></div>
    <p>${c.desc}</p>
    <span class="openp"><i class="dot ${o?'':'cl'}"></i>${o?'Open now':'Closed now'} · Today: ${ts?fmtH(ts[0])+' – '+fmtH(ts[1]):'Closed'}</span>
-   <div class="actions"><button class="btn ${f?'btn-brown':'btn-green'}" data-action="fav" data-id="${c.id}">${I('heart',18)} ${f?'Saved to favorites':'Save to favorites'}</button><button class="btn btn-ghost" data-action="mapTo" data-id="${c.id}">${I('map',18)} View on map</button></div>
+   <div class="actions"><button class="btn ${f?'btn-brown':'btn-green'}" data-action="fav" data-id="${c.id}">${I('heart',18)} ${f?'Saved to favorites':'Save to favorites'}</button><button class="btn btn-ghost" data-action="mapTo" data-id="${c.id}">${I('map',18)} View on map</button><button class="btn btn-green" data-action="saveSpot" data-id="${c.id}">${I('pin',18)} Save my spot</button></div>
    <div><button class="link" data-action="report" data-id="${c.id}">${I('flag',15)} Report incorrect information</button></div>
   </div></section>
 
@@ -923,6 +923,7 @@ document.addEventListener('click',e=>{
   case 'reset':S.mapVB={x:0,y:0,w:900,h:620};applyVB();break;
   case 'locate':S.located=true;toast('Approximate location: Roma Norte, Mexico City (demo)');if(S.view!=='map'){S.mapVB={x:230,y:158,w:500,h:344};go('map')}else{render();centerOn(480,330)}break;
   case 'mapTo':{const c=byId(id);S.sel=id;S.mapVB={x:c.x-250,y:c.y-172,w:500,h:344};go('map')}break;
+  case 'saveSpot':toast('Spot saved');break;
   case 'tab':S.tab=v;render();break;
   case 'authTab':S.authTab=v;render();break;
   case 'loginGo':S.after=S.view==='account'?null:{view:S.view,id:S.id};S.authTab='login';go('login');break;
